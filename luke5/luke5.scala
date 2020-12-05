@@ -28,26 +28,25 @@ object Luke5 extends App {
   val input = dom.experimental.Fetch.fetch("https://julekalender-backend.knowit.no/challenges/5/attachments/rute.txt")
     .toFuture.flatMap(_.text().toFuture).foreach { input =>
 
-  val positions = input.scanLeft( Point(0, 0) ) { (curPos, cmd) =>
-    cmd match {
-      case 'H' => Point(curPos.x + 1, curPos.y)
-      case 'V' => Point(curPos.x - 1, curPos.y)
-      case 'O' => Point(curPos.x, curPos.y + 1)
-      case 'N' => Point(curPos.x, curPos.y - 1)
+    val positions = input.scanLeft( Point(0, 0) ) { (curPos, cmd) =>
+      cmd match {
+        case 'H' => Point(curPos.x + 1, curPos.y)
+        case 'V' => Point(curPos.x - 1, curPos.y)
+        case 'O' => Point(curPos.x, curPos.y + 1)
+        case 'N' => Point(curPos.x, curPos.y - 1)
+      }
     }
-  }
 
-  println(
-    Polygon(positions.toList).area.toInt
-  )
+    println(
+      Polygon(positions.toList).area.toInt
+    )
 
-  drawPointsToCanvas(positions)
+    drawPointsToCanvas(positions)
   }
 
   def drawPointsToCanvas(positions: Seq[Point]) = {
     import dom.html.Canvas
 
-println("Positions: " + positions.size)
     val canvas: Canvas = dom.document.getElementsByTagName("canvas")(0).asInstanceOf[Canvas]
     val xmin = positions.map(_.x).min
     val ymin = positions.map(_.y).min
@@ -61,7 +60,6 @@ println("Positions: " + positions.size)
 
     val ctx: dom.CanvasRenderingContext2D = canvas.getContext("2d").asInstanceOf[dom.CanvasRenderingContext2D]
 
-//    ctx.strokeStyle = "red"
     ctx.lineWidth = 1
     ctx.beginPath()
 
